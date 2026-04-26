@@ -259,7 +259,7 @@
                                 <span x-text="winTitle" class="text-xs text-gray-400 font-mono mx-auto"></span>
                             </div>
 
-                            <div class="bg-[#1e1e1e] relative">
+                            <div class="window-code-area bg-[#1e1e1e] relative">
                                 <div class="flex">
                                     <div
                                         x-show="showLines"

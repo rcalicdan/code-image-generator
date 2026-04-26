@@ -1,6 +1,7 @@
 .resize-container {
     position: relative;
     display: inline-block;
+    overflow: hidden; 
 }
 
 .resize-handle-e,

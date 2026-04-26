@@ -34,7 +34,7 @@ export default function codeSnap() {
         },
 
         updateHighlight() {
-            const raw  = this.code || '';
+            const raw = this.code || '';
             const lang = this.lang;
             let result;
             if (lang === 'auto') {
@@ -54,18 +54,18 @@ export default function codeSnap() {
         },
 
         handleTab(e) {
-            const el    = e.target;
+            const el = e.target;
             const start = el.selectionStart;
-            const end   = el.selectionEnd;
-            this.code   = this.code.substring(0, start) + '  ' + this.code.substring(end);
+            const end = el.selectionEnd;
+            this.code = this.code.substring(0, start) + '  ' + this.code.substring(end);
             this.$nextTick(() => { el.selectionStart = el.selectionEnd = start + 2; });
         },
 
         syncScroll(e) {
-            const el  = e.target;
+            const el = e.target;
             const pre = this.$refs.codeHighlighted;
             if (pre) {
-                pre.scrollTop  = el.scrollTop;
+                pre.scrollTop = el.scrollTop;
                 pre.scrollLeft = el.scrollLeft;
             }
             if (this.$refs.lineNumbersEl) {
@@ -79,12 +79,12 @@ export default function codeSnap() {
         },
 
         setBg(bgName) {
-            this.bgClass  = bgName;
+            this.bgClass = bgName;
             this.customBg = '';
         },
 
         setCustomBg(e) {
-            this.bgClass  = '';
+            this.bgClass = '';
             this.customBg = e.target.value;
         },
 
@@ -95,11 +95,12 @@ export default function codeSnap() {
         initResize(e, direction) {
             e.preventDefault();
             const container = this.$refs.resizeContainer;
-            const badge     = this.$refs.sizeBadge;
-            const startX    = e.clientX;
-            const startY    = e.clientY;
-            const startW    = container.offsetWidth;
-            const startH    = container.offsetHeight;
+            const badge = this.$refs.sizeBadge;
+            const startX = e.clientX;
+            const startY = e.clientY;
+            const startW = container.offsetWidth;
+            const startH = container.offsetHeight;
+            const minHeight = container.scrollHeight;
 
             container.classList.add('resizing');
             this.isResizing = true;
@@ -107,8 +108,14 @@ export default function codeSnap() {
             const onMove = (ev) => {
                 const dx = ev.clientX - startX;
                 const dy = ev.clientY - startY;
-                if (direction === 'e'  || direction === 'se') this.containerWidth  = Math.max(320, startW + dx);
-                if (direction === 's'  || direction === 'se') this.containerHeight = Math.max(120, startH + dy);
+
+                if (direction === 'e' || direction === 'se') {
+                    this.containerWidth = Math.max(320, startW + dx);
+                }
+                if (direction === 's' || direction === 'se') {
+                    this.containerHeight = Math.max(minHeight, 120, startH + dy);
+                }
+
                 if (badge) {
                     const h = this.containerHeight ?? container.offsetHeight;
                     badge.textContent = `${Math.round(this.containerWidth)} × ${Math.round(h)}`;
@@ -119,16 +126,16 @@ export default function codeSnap() {
                 container.classList.remove('resizing');
                 this.isResizing = false;
                 document.removeEventListener('mousemove', onMove);
-                document.removeEventListener('mouseup',   onUp);
+                document.removeEventListener('mouseup', onUp);
             };
 
             document.addEventListener('mousemove', onMove);
-            document.addEventListener('mouseup',   onUp);
+            document.addEventListener('mouseup', onUp);
         },
 
         async exportImage() {
             this.isExporting = true;
-            const codeInput  = this.$refs.codeInput;
+            const codeInput = this.$refs.codeInput;
             codeInput.style.opacity = '0';
             try {
                 const canvas = await window.html2canvas(this.$refs.exportArea, {
@@ -137,9 +144,9 @@ export default function codeSnap() {
                     useCORS: true,
                     logging: false,
                 });
-                const link    = document.createElement('a');
+                const link = document.createElement('a');
                 link.download = `codesnap-${Date.now()}.png`;
-                link.href     = canvas.toDataURL('image/png');
+                link.href = canvas.toDataURL('image/png');
                 link.click();
             } finally {
                 codeInput.style.opacity = '1';
