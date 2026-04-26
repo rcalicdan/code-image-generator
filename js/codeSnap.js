@@ -1,33 +1,82 @@
 export default function codeSnap() {
+    const STORAGE_KEY = 'codesnap_state';
+
+    function loadState() {
+        try {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            return saved ? JSON.parse(saved) : {};
+        } catch {
+            return {};
+        }
+    }
+
+    function saveState(state) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch { }
+    }
+
+    const saved = loadState();
+
     return {
-        code: `function greet(name) {\n  return \`Hello, \${name}!\`;\n}\n\nconsole.log(greet('World'));`,
+        code: saved.code ?? `function greet(name) {\n  return \`Hello, \${name}!\`;\n}\n\nconsole.log(greet('World'));`,
         highlightedCode: '',
         lineNumbers: [],
-        bgClass: 'bg-gradient-1',
-        customBg: '',
-        winStyle: 'macos',
-        winTitle: 'index.js',
-        fontSize: 14,
-        padding: 48,
-        showLines: false,
-        showShadow: true,
-        lang: 'auto',
-        theme: 'atom-one-dark',
+        bgClass: saved.bgClass ?? 'bg-gradient-1',
+        customBg: saved.customBg ?? '',
+        winStyle: saved.winStyle ?? 'macos',
+        winTitle: saved.winTitle ?? 'index.js',
+        fontSize: saved.fontSize ?? 14,
+        padding: saved.padding ?? 48,
+        showLines: saved.showLines ?? false,
+        showShadow: saved.showShadow ?? true,
+        lang: saved.lang ?? 'auto',
+        theme: saved.theme ?? 'atom-one-dark',
         isExporting: false,
-        containerWidth: 600,
-        containerHeight: null,
+        containerWidth: 0,
+        containerMinHeight: 0,
         isResizing: false,
         panelOpen: false,
 
         init() {
             this.updateHighlight();
-            this.$watch('code', () => this.updateHighlight());
-            this.$watch('lang', () => this.updateHighlight());
+
+            if (this.theme !== 'atom-one-dark') {
+                document.getElementById('hljs-theme').href =
+                    `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/${this.theme}.min.css`;
+            }
+
+            const persist = () => saveState({
+                code: this.code,
+                bgClass: this.bgClass,
+                customBg: this.customBg,
+                winStyle: this.winStyle,
+                winTitle: this.winTitle,
+                fontSize: this.fontSize,
+                padding: this.padding,
+                showLines: this.showLines,
+                showShadow: this.showShadow,
+                lang: this.lang,
+                theme: this.theme,
+            });
+
+            this.$watch('code', () => { this.updateHighlight(); persist(); });
+            this.$watch('lang', () => { this.updateHighlight(); persist(); });
             this.$watch('theme', (newTheme) => {
                 document.getElementById('hljs-theme').href =
                     `https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/${newTheme}.min.css`;
                 setTimeout(() => this.updateHighlight(), 100);
+                persist();
             });
+            this.$watch('bgClass', persist);
+            this.$watch('customBg', persist);
+            this.$watch('winStyle', persist);
+            this.$watch('winTitle', persist);
+            this.$watch('fontSize', persist);
+            this.$watch('padding', persist);
+            this.$watch('showLines', persist);
+            this.$watch('showShadow', persist);
+
             this.$nextTick(() => {
                 if (this.$refs.codeInput) this.resizeTextarea(this.$refs.codeInput);
             });
@@ -92,15 +141,38 @@ export default function codeSnap() {
             return `bg-swatch bg-gradient-${bg} ${this.bgClass === `bg-gradient-${bg}` ? 'active' : ''}`;
         },
 
+        resetState() {
+            localStorage.removeItem(STORAGE_KEY);
+            this.code = `function greet(name) {\n  return \`Hello, \${name}!\`;\n}\n\nconsole.log(greet('World'));`;
+            this.bgClass = 'bg-gradient-1';
+            this.customBg = '';
+            this.winStyle = 'macos';
+            this.winTitle = 'index.js';
+            this.fontSize = 14;
+            this.padding = 48;
+            this.showLines = false;
+            this.showShadow = true;
+            this.lang = 'auto';
+            this.theme = 'atom-one-dark';
+            this.containerWidth = 0;
+            this.containerMinHeight = 0;
+            document.getElementById('hljs-theme').href =
+                'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css';
+            this.$nextTick(() => {
+                if (this.$refs.codeInput) this.resizeTextarea(this.$refs.codeInput);
+            });
+        },
+
         initResize(e, direction) {
             e.preventDefault();
             const container = this.$refs.resizeContainer;
             const badge = this.$refs.sizeBadge;
             const startX = e.clientX;
             const startY = e.clientY;
-            const startW = container.offsetWidth;
-            const startH = container.offsetHeight;
-            const minHeight = container.scrollHeight;
+            const startW = container.getBoundingClientRect().width;
+            const startH = container.getBoundingClientRect().height;
+
+            if (!this.containerWidth) this.containerWidth = startW;
 
             container.classList.add('resizing');
             this.isResizing = true;
@@ -113,11 +185,11 @@ export default function codeSnap() {
                     this.containerWidth = Math.max(320, startW + dx);
                 }
                 if (direction === 's' || direction === 'se') {
-                    this.containerHeight = Math.max(minHeight, 120, startH + dy);
+                    this.containerMinHeight = Math.max(0, startH + dy);
                 }
 
                 if (badge) {
-                    const h = this.containerHeight ?? container.offsetHeight;
+                    const h = container.getBoundingClientRect().height;
                     badge.textContent = `${Math.round(this.containerWidth)} × ${Math.round(h)}`;
                 }
             };
@@ -136,13 +208,37 @@ export default function codeSnap() {
         async exportImage() {
             this.isExporting = true;
             const codeInput = this.$refs.codeInput;
+            const exportArea = this.$refs.exportArea;
+
             codeInput.style.opacity = '0';
+
+            const allEls = exportArea.querySelectorAll('*');
+            const savedOverflows = [];
+            allEls.forEach(el => {
+                savedOverflows.push(el.style.overflow);
+                const computed = window.getComputedStyle(el).overflow;
+                if (computed === 'hidden' || computed === 'auto' || computed === 'scroll') {
+                    el.style.overflow = 'visible';
+                }
+            });
+
+            await new Promise(r => setTimeout(r, 50));
+
+            const fullWidth = exportArea.scrollWidth;
+            const fullHeight = exportArea.scrollHeight;
+
             try {
-                const canvas = await window.html2canvas(this.$refs.exportArea, {
+                const canvas = await window.html2canvas(exportArea, {
                     backgroundColor: null,
                     scale: 2,
                     useCORS: true,
                     logging: false,
+                    width: fullWidth,
+                    height: fullHeight,
+                    windowWidth: fullWidth,
+                    windowHeight: fullHeight,
+                    scrollX: 0,
+                    scrollY: 0,
                 });
                 const link = document.createElement('a');
                 link.download = `codesnap-${Date.now()}.png`;
@@ -150,6 +246,7 @@ export default function codeSnap() {
                 link.click();
             } finally {
                 codeInput.style.opacity = '1';
+                allEls.forEach((el, i) => { el.style.overflow = savedOverflows[i]; });
                 this.isExporting = false;
             }
         },
