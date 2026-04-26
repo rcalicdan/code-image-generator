@@ -1,0 +1,51 @@
+#code-input,
+#code-highlighted,
+.code-input,
+.code-highlighted {
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    tab-size: 2;
+}
+
+#code-input,
+.code-input {
+    caret-color: white;
+    color: transparent;
+    background: transparent;
+    resize: none;
+    outline: none;
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    z-index: 2;
+    white-space: pre;
+    overflow: auto;   
+    border: none;
+}
+
+#code-highlighted,
+.code-highlighted {
+    position: relative;
+    z-index: 1;
+    white-space: pre;
+    overflow: hidden; 
+    pointer-events: none;
+}
+
+.editor-wrapper {
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.line-numbers-col {
+    user-select: none;
+    opacity: 0.4;
+    text-align: right;
+    padding-right: 12px;
+    min-width: 36px;
+}

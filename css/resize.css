@@ -1,0 +1,104 @@
+.resize-container {
+    position: relative;
+    display: inline-block;
+}
+
+.resize-handle-e,
+.resize-handle-s,
+.resize-handle-se {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.resize-handle-e {
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 40px;
+    cursor: ew-resize;
+}
+
+.resize-handle-s {
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 12px;
+    cursor: ns-resize;
+}
+
+.resize-handle-se {
+    bottom: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+}
+
+.resize-handle-e .handle-bar,
+.resize-handle-s .handle-bar {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.resize-handle-e .handle-bar {
+    width: 4px;
+    height: 28px;
+}
+
+.resize-handle-s .handle-bar {
+    width: 28px;
+    height: 4px;
+}
+
+.resize-handle-se .handle-bar {
+    width: 8px;
+    height: 8px;
+    border-right: 3px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1px;
+    transition: border-color 0.2s;
+}
+
+.resize-handle-e:hover .handle-bar,
+.resize-handle-s:hover .handle-bar {
+    background: rgba(139, 92, 246, 0.8);
+}
+
+.resize-handle-se:hover .handle-bar {
+    border-color: rgba(139, 92, 246, 0.8);
+}
+
+.resize-container:not(:hover) .resize-handle-e .handle-bar,
+.resize-container:not(:hover) .resize-handle-s .handle-bar {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.resize-container:not(:hover) .resize-handle-se .handle-bar {
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.size-badge {
+    position: absolute;
+    top: -26px;
+    right: 0;
+    background: rgba(139, 92, 246, 0.9);
+    color: white;
+    font-size: 10px;
+    font-family: monospace;
+    padding: 2px 6px;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+
+.resize-container.resizing .size-badge {
+    opacity: 1;
+}

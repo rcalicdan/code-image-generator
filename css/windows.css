@@ -1,0 +1,9 @@
+.window-frame {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+#watermark {
+    font-family: system-ui, sans-serif;
+}

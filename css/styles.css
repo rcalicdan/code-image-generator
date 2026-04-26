@@ -1,0 +1,309 @@
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 3px;
+}
+
+#code-input,
+#code-highlighted,
+.code-input,
+.code-highlighted {
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    tab-size: 2;
+}
+
+#code-input,
+.code-input {
+    caret-color: white;
+    color: transparent;
+    background: transparent;
+    resize: none;
+    outline: none;
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    z-index: 2;
+    white-space: pre;
+    overflow: auto;
+    border: none;
+}
+
+#code-highlighted,
+.code-highlighted {
+    position: relative;
+    z-index: 1;
+    white-space: pre;
+    overflow: auto;
+    pointer-events: none;
+}
+
+.editor-wrapper {
+    position: relative;
+    overflow: auto;
+}
+
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.window-frame {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.bg-gradient-1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-2 {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.bg-gradient-3 {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.bg-gradient-4 {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.bg-gradient-5 {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.bg-gradient-6 {
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.bg-gradient-7 {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+.bg-gradient-8 {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+
+.bg-gradient-9 {
+    background: linear-gradient(135deg, #141e30, #243b55);
+}
+
+.bg-gradient-10 {
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+}
+
+.bg-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 2px solid transparent;
+    flex-shrink: 0;
+}
+
+.bg-swatch:hover {
+    transform: scale(1.15);
+}
+
+.bg-swatch.active {
+    border-color: white;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+/* ── Line numbers ─────────────────────────────────────── */
+.line-numbers-col {
+    user-select: none;
+    opacity: 0.4;
+    text-align: right;
+    padding-right: 12px;
+    min-width: 36px;
+}
+
+/* ── Panel ────────────────────────────────────────────── */
+.panel-section {
+    border-bottom: 1px solid #2d2d2d;
+}
+
+#watermark {
+    font-family: system-ui, sans-serif;
+}
+
+/* ── Floating export button ───────────────────────────── */
+.fab-export {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #7c3aed, #db2777);
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 8px 32px rgba(124, 58, 237, 0.45), 0 2px 8px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+    white-space: nowrap;
+}
+
+.fab-export:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 12px 40px rgba(124, 58, 237, 0.55), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.fab-export:active {
+    transform: scale(0.97);
+}
+
+.fab-export:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Collapsed to icon-only on small screens */
+@media (max-width: 640px) {
+    .fab-export {
+        bottom: 20px;
+        right: 20px;
+        padding: 14px;
+        border-radius: 50%;
+    }
+
+    .fab-label {
+        display: none;
+    }
+}
+
+/* ── Mobile panel drawer ──────────────────────────────── */
+.panel-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 30;
+    backdrop-filter: blur(2px);
+}
+
+/* ── Resize container ─────────────────────────────────── */
+.resize-container {
+    position: relative;
+    display: inline-block;
+}
+
+.resize-handle-e {
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 40px;
+    cursor: ew-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.resize-handle-s {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 12px;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.resize-handle-se {
+    position: absolute;
+    bottom: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    cursor: nwse-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.resize-handle-e .handle-bar {
+    width: 4px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.resize-handle-s .handle-bar {
+    width: 28px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 2px;
+    transition: background 0.2s;
+}
+
+.resize-handle-se .handle-bar {
+    width: 8px;
+    height: 8px;
+    border-right: 3px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1px;
+    transition: border-color 0.2s;
+}
+
+.resize-handle-e:hover .handle-bar,
+.resize-handle-s:hover .handle-bar {
+    background: rgba(139, 92, 246, 0.8);
+}
+
+.resize-handle-se:hover .handle-bar {
+    border-color: rgba(139, 92, 246, 0.8);
+}
+
+.resize-container:not(:hover) .resize-handle-e .handle-bar,
+.resize-container:not(:hover) .resize-handle-s .handle-bar {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.resize-container:not(:hover) .resize-handle-se .handle-bar {
+    border-color: rgba(255, 255, 255, 0.06);
+}
+
+.size-badge {
+    position: absolute;
+    top: -26px;
+    right: 0;
+    background: rgba(139, 92, 246, 0.9);
+    color: white;
+    font-size: 10px;
+    font-family: monospace;
+    padding: 2px 6px;
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+
+.resize-container.resizing .size-badge {
+    opacity: 1;
+}
