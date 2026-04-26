@@ -1,0 +1,136 @@
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 3px;
+}
+
+#code-input,
+#code-highlighted {
+    font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+    tab-size: 2;
+}
+
+#code-input {
+    caret-color: white;
+    color: transparent;
+    background: transparent;
+    resize: none;
+    outline: none;
+    position: absolute;
+    inset: 0;
+    padding: inherit;
+    z-index: 2;
+    white-space: pre;
+    overflow: auto;
+    border: none;
+}
+
+#code-highlighted {
+    position: relative;
+    z-index: 1;
+    white-space: pre;
+    overflow: auto;
+    pointer-events: none;
+}
+
+.editor-wrapper {
+    position: relative;
+    overflow: auto;
+}
+
+.hljs {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+.window-frame {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.bg-gradient-1 {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-2 {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.bg-gradient-3 {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.bg-gradient-4 {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.bg-gradient-5 {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.bg-gradient-6 {
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.bg-gradient-7 {
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+.bg-gradient-8 {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+}
+
+.bg-gradient-9 {
+    background: linear-gradient(135deg, #141e30, #243b55);
+}
+
+.bg-gradient-10 {
+    background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+}
+
+.bg-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    border: 2px solid transparent;
+}
+
+.bg-swatch:hover {
+    transform: scale(1.15);
+}
+
+.bg-swatch.active {
+    border-color: white;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.line-numbers-col {
+    user-select: none;
+    opacity: 0.4;
+    text-align: right;
+    padding-right: 12px;
+    min-width: 36px;
+}
+
+#export-btn:active {
+    transform: scale(0.96);
+}
+
+.panel-section {
+    border-bottom: 1px solid #2d2d2d;
+}
+
+#watermark {
+    font-family: system-ui, sans-serif;
+}
